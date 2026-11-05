@@ -11,20 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Ara
+      - name: Urun ve yorumlar
         run: |
-          mkdir -p arsiv/trendyol; cd arsiv/trendyol
+          mkdir -p arsiv/trendyol/p1154499985; cd arsiv/trendyol/p1154499985
+          ID=1154499985
           UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
-          q() { curl -sS -m 40 -A "$UA" -H "Accept: application/json" -H "Accept-Language: tr-TR" -o "$1" -w "$1 %{http_code} %{size_download}\n" "$2" || echo "$1 fail"; }
-          q s1.json "https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll/sr?mid=180449&q=tarakl%C4%B1%20ayaklara%20%C3%B6zel&culture=tr-TR&storefrontId=1&pi=1"
-          q s2.json "https://apigw.trendyol.com/discovery-sfint-search-service/api/search/products?mid=180449&q=tarakl%C4%B1&culture=tr-TR&storefrontId=1&pi=1"
-          q s3.json "https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll/sr?mid=180449&os=1&sst=BEST_SELLER&culture=tr-TR&storefrontId=1&pi=1"
-          curl -sS -m 40 -A "$UA" -H "Accept-Language: tr-TR" -o store.html -w "store.html %{http_code} %{size_download}\n" "https://www.trendyol.com/sr?mid=180449&os=1&sst=BEST_SELLER" || true
-          grep -o 'https://www.trendyol.com/karinca[^"]*-p-[0-9]*' store.html | sort -u | head -50 > links.txt || true
-          grep -o '/karinca/[a-z0-9-]*-p-[0-9]*' store.html s1.json s3.json 2>/dev/null | sort -u | head -80 >> links.txt || true
-          grep -io '[^"]*tarakl[^"]*' s1.json s3.json store.html 2>/dev/null | head -20 > tarakli.txt || true
-          wc -l links.txt tarakli.txt; head -c 600 s1.json; echo
+          g() { curl -sSL -m 40 -A "$UA" -H "Accept-Language: tr-TR,tr;q=0.9" -H "Accept: $3" -o "$1" -w "$1 %{http_code} %{size_download}\n" "$2" || echo "$1 fail"; }
+          g urun.html "https://www.trendyol.com/karinca/en-rahat-gelin-ayakkabisi-tarakli-ayaklara-ozel-gelinlik-ayakkabisi-p-$ID" "text/html"
+          g yorum.html "https://www.trendyol.com/karinca/en-rahat-gelin-ayakkabisi-tarakli-ayaklara-ozel-gelinlik-ayakkabisi-p-$ID/yorumlar" "text/html"
+          for p in 0 1 2; do
+            g r1_$p.json "https://apigw.trendyol.com/discovery-storefront-trproductgw-service/api/review-read/product-reviews/detailed?contentId=$ID&page=$p&order=DESC&orderBy=Score&channelId=1" "application/json"
+            g r2_$p.json "https://public-mdc.trendyol.com/discovery-web-socialgw-service/api/review/$ID?page=$p&order=5&orderByField=Score&culture=tr-TR&storefrontId=1" "application/json"
+          done
+          g m1.json "https://apigw.trendyol.com/discovery-storefront-trproductgw-service/api/review-read/product-reviews/media?contentId=$ID&page=0&channelId=1" "application/json"
+          g m2.json "https://public-mdc.trendyol.com/discovery-web-socialgw-service/api/review/media/$ID?page=0&culture=tr-TR" "application/json"
+          # medya linklerini topla ve indir
+          cat *.json *.html 2>/dev/null | grep -oE 'https?:\\?/\\?/[a-z0-9.-]*(dsmcdn|trendyol)[a-z0-9.-]*\\?/[^"\\ ]*\.(jpe?g|png|webp|mp4|m3u8|mov)' | sed 's#\\/#/#g' | sort -u > medya_linkleri.txt
+          grep -E 'review|yorum|ugc|social' medya_linkleri.txt > yorum_medya.txt || true
+          wc -l medya_linkleri.txt yorum_medya.txt
+          mkdir -p medya; i=0
+          while read -r u; do i=$((i+1)); e="${u##*.}"; curl -sSL -m 60 -A "$UA" -o "medya/$(printf %03d $i).$e" "$u" || true; done < yorum_medya.txt
+          ls medya | wc -l; du -sh medya
       - name: Kaydet
         run: |
           git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
-          git add -f arsiv/trendyol; git commit -m "Trendyol arama" || true; git push
+          git pull -q --rebase || true
+          git add -f arsiv/trendyol; git commit -m "Trendyol urun ve yorum verisi" || true; git push
