@@ -1,0 +1,51 @@
+name: Site medya indir
+on:
+  push:
+    branches: [arsiv]
+    paths: ['.github/workflows/site.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Medya listesi ve urunler
+        run: |
+          mkdir -p arsiv/site/medya arsiv/site/urun
+          B=https://karincaayakkabi.com.tr
+          A="Mozilla/5.0 (KarincaMedyaArsiv)"
+          : > arsiv/site/medya.tsv
+          for p in $(seq 1 40); do
+            r=$(curl -fsS -A "$A" "$B/wp-json/wp/v2/media?per_page=100&page=$p&_fields=id,date,source_url,media_type,mime_type,alt_text" || echo "[]")
+            n=$(echo "$r" | jq 'length'); [ "$n" = "0" ] && break
+            echo "$r" | jq -r '.[] | [.id,.date,.media_type,.mime_type,.source_url,(.alt_text//"")] | @tsv' >> arsiv/site/medya.tsv
+          done
+          : > arsiv/site/urunler.json; echo "[" > arsiv/site/urunler.json; first=1
+          for p in $(seq 1 20); do
+            r=$(curl -fsS -A "$A" "$B/wp-json/wc/store/v1/products?per_page=100&page=$p" || echo "[]")
+            n=$(echo "$r" | jq 'length'); [ "$n" = "0" ] && break
+            echo "$r" | jq -c '.[] | {id,name,slug,permalink,prices:{price:.prices.price,regular:.prices.regular_price},categories:[.categories[].name],images:[.images[].src],stock:.is_in_stock}' | while read -r l; do [ $first = 1 ] || echo "," >> arsiv/site/urunler.json; echo "$l" >> arsiv/site/urunler.json; first=0; done
+          done
+          echo "]" >> arsiv/site/urunler.json
+          wc -l arsiv/site/medya.tsv
+      - name: Dosyalari indir
+        run: |
+          cd arsiv/site
+          ok=0
+          while IFS=$'\t' read -r id date mt mime url alt; do
+            [ "$mt" = "image" ] || [ "${mime#video}" != "$mime" ] || continue
+            f="medya/${date:0:10}_${id}_$(basename "${url%%\?*}")"
+            [ -f "$f" ] && continue
+            curl -fsSL -A "Mozilla/5.0" -o "$f" "$url" && ok=$((ok+1)) || rm -f "$f"
+          done < medya.tsv
+          jq -r '.[] | .slug as $s | .images | to_entries[] | [$s, (.key|tostring), .value] | @tsv' urunler.json 2>/dev/null | while IFS=$'\t' read -r s k u; do
+            e="${u%%\?*}"; e="${e##*.}"; [ ${#e} -gt 4 ] && e=jpg
+            f="urun/${s}_${k}.${e}"; [ -f "$f" ] || curl -fsSL -A "Mozilla/5.0" -o "$f" "$u" || rm -f "$f"
+          done
+          echo "medya=$ok"; ls urun | wc -l; du -sh .
+      - name: Kaydet
+        run: |
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git add arsiv/site; git commit -m "Site medya arsivi" || true; git push
