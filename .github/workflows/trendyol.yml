@@ -1,0 +1,30 @@
+name: Trendyol veri
+on:
+  push:
+    branches: [arsiv]
+    paths: ['.github/workflows/trendyol.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  cek:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ara
+        run: |
+          mkdir -p arsiv/trendyol; cd arsiv/trendyol
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
+          q() { curl -sS -m 40 -A "$UA" -H "Accept: application/json" -H "Accept-Language: tr-TR" -o "$1" -w "$1 %{http_code} %{size_download}\n" "$2" || echo "$1 fail"; }
+          q s1.json "https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll/sr?mid=180449&q=tarakl%C4%B1%20ayaklara%20%C3%B6zel&culture=tr-TR&storefrontId=1&pi=1"
+          q s2.json "https://apigw.trendyol.com/discovery-sfint-search-service/api/search/products?mid=180449&q=tarakl%C4%B1&culture=tr-TR&storefrontId=1&pi=1"
+          q s3.json "https://public.trendyol.com/discovery-web-searchgw-service/v2/api/infinite-scroll/sr?mid=180449&os=1&sst=BEST_SELLER&culture=tr-TR&storefrontId=1&pi=1"
+          curl -sS -m 40 -A "$UA" -H "Accept-Language: tr-TR" -o store.html -w "store.html %{http_code} %{size_download}\n" "https://www.trendyol.com/sr?mid=180449&os=1&sst=BEST_SELLER" || true
+          grep -o 'https://www.trendyol.com/karinca[^"]*-p-[0-9]*' store.html | sort -u | head -50 > links.txt || true
+          grep -o '/karinca/[a-z0-9-]*-p-[0-9]*' store.html s1.json s3.json 2>/dev/null | sort -u | head -80 >> links.txt || true
+          grep -io '[^"]*tarakl[^"]*' s1.json s3.json store.html 2>/dev/null | head -20 > tarakli.txt || true
+          wc -l links.txt tarakli.txt; head -c 600 s1.json; echo
+      - name: Kaydet
+        run: |
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git add -f arsiv/trendyol; git commit -m "Trendyol arama" || true; git push
