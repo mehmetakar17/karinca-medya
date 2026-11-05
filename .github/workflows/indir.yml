@@ -1,0 +1,31 @@
+name: Arsiv indir
+on:
+  push:
+    branches: [arsiv]
+    paths: ['arsiv/urls.tsv']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  indir:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dosyalari indir
+        run: |
+          cd arsiv
+          ok=0; fail=0
+          while IFS=$'\t' read -r path url; do
+            [ -z "$path" ] && continue
+            [ -f "$path" ] && continue
+            mkdir -p "$(dirname "$path")"
+            if curl -fsSL --retry 2 -A "Mozilla/5.0" -o "$path" "$url"; then ok=$((ok+1)); else fail=$((fail+1)); echo "HATA $path"; rm -f "$path"; fi
+          done < urls.tsv
+          echo "indirilen=$ok hata=$fail"
+      - name: Kaydet
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@users.noreply.github.com"
+          git add arsiv
+          git commit -m "Arsiv dosyalari indirildi" || echo "degisiklik yok"
+          git push
