@@ -1,0 +1,14 @@
+https://cdn.dsmcdn.com/sfweb/images/apple-icon-120.png
+https://cdn.dsmcdn.com/sfweb/images/apple-icon-152.png
+https://cdn.dsmcdn.com/sfweb/images/apple-icon-167.png
+https://cdn.dsmcdn.com/sfweb/images/apple-icon-180.png
+https://cdn.dsmcdn.com/sfweb/images/ipad_splash.png
+https://cdn.dsmcdn.com/sfweb/images/ipadpro1_splash.png
+https://cdn.dsmcdn.com/sfweb/images/ipadpro2_splash.png
+https://cdn.dsmcdn.com/sfweb/images/ipadpro3_splash.png
+https://cdn.dsmcdn.com/sfweb/images/iphone5_splash.png
+https://cdn.dsmcdn.com/sfweb/images/iphone6_splash.png
+https://cdn.dsmcdn.com/sfweb/images/iphoneplus_splash.png
+https://cdn.dsmcdn.com/sfweb/images/iphonex_splash.png
+https://cdn.dsmcdn.com/sfweb/images/iphonexr_splash.png
+https://cdn.dsmcdn.com/sfweb/images/iphonexsmax_splash.png
