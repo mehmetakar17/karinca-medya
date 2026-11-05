@@ -149,7 +149,7 @@ a = a.point(lambda v: int(150 * (v / 255) ** 1.4)); g.paste((0, 0, 0, 255), (0, 
 gp = os.path.join(work, 'grad.png'); g.save(gp)
 
 vid_end = frames[-2] / FPS
-punch = "+".join(f"0.05*exp(-(t-{b:.3f})*14)*gte(t,{b:.3f})*lt(t,{b + 0.4:.3f})" for b in beats if b < vid_end)
+punch = "+".join(f"0.05*exp(-max(t-{b:.3f},0)*14)*gte(t,{b:.3f})*lt(t,{b + 0.4:.3f})" for b in beats if b < vid_end)
 fc = (f"[0:v]scale=w='trunc({W}*(1+{punch})/2)*2':h='trunc({H}*(1+{punch})/2)*2':eval=frame,crop={W}:{H},setsar=1[z];"
       f"[z][1:v]overlay=enable='lt(t,{vid_end:.3f})'[g0];")
 last = 'g0'; inputs = ['-i', body, '-loop', '1', '-i', gp]

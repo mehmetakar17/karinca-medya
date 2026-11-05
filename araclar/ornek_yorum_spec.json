@@ -1,1 +1,128 @@
-{"music": "/mnt/user-data/attachments/23a739f0-ee9d-5809-9295-a5cb4a62f5e7/97adcfef-kulakovka-fashion-week-614882.mp3", "out": "/home/claude/reel-amsterdam-yorumlar.mp4", "fonts": "/tmp/claude-0/-home-claude/23a739f0-ee9d-5809-9295-a5cb4a62f5e7/scratchpad/node_modules/@fontsource", "logo": "/tmp/claude-0/-home-claude/23a739f0-ee9d-5809-9295-a5cb4a62f5e7/scratchpad/brand/dikey_siyah.png", "search_from": 10, "scenes": [{"kind": "intro", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/69056253-1785528872166_orig.jpeg", "focus": [0.5, 0.7], "beats": 8, "lines": [[["TARAKLI AYAKLAR İÇİN", "kicker"]], [["EN", "title"], ["RAHAT", "title"]], [["GELİN", "title"], ["AYAKKABISI", "title"]], [["Amsterdam Gelin Ayakkabısı", "sub"]]]}, {"kind": "intro", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/69056253-1785528873015_orig.jpeg", "focus": [0.7, 0.5], "beats": 4, "lines": [[["GELİNLER", "big"]], [["NE DİYOR?", "box"]]]}, {"kind": "review", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/36271129-1784028703142_orig.jpeg", "focus": [0.5, 0.6], "beats": 12, "name": "B.N.H.", "quote": "Topuklu ayakkabı giymek benim için eziyet gibiyken mükemmel ötesi bir rahat oldu."}, {"kind": "review", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/12937369-1784366219076_orig.jpeg", "focus": [0.5, 0.6], "beats": 12, "name": "N.M.", "quote": "6 gelin ayakkabıcısı gezdim, hiçbirindeki ayakkabı ayağıma olmadı… Ayakkabı tam istediğim gibi."}, {"kind": "review", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/69056253-1785528873015_orig.jpeg", "focus": [0.35, 0.5], "beats": 12, "name": "Trendyol Kullanıcısı", "quote": "Tek bantlı modeller canımı çok acıtırken geniş ön bant sayesinde öyle bir problem yaşamadım."}, {"kind": "review", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/11162192-1786339057135_orig.jpeg", "focus": [0.45, 0.5], "beats": 12, "name": "Z.Ç.", "quote": "Ayakta kalıp denedim, ağrı olmadı. Bir de ayağı zarif ve ince gösteriyor."}, {"kind": "review", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/16067709-1785938615759_orig.jpeg", "focus": [0.45, 0.5], "beats": 12, "name": "T.Ç.", "quote": "Ürün çok güzel ve aşırı rahat. Alacak olanlara şiddetle tavsiye ediyorum."}, {"kind": "review", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/5730817-1790004101118_orig.jpeg", "focus": [0.5, 0.55], "beats": 12, "name": "İ.Y.", "quote": "O kadar rahat ki… Bu kadar yer gezdim, içime bir tek bu sindi."}, {"kind": "stat", "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/11162192-1786339057135_orig.jpeg", "focus": [0.6, 0.5], "beats": 8, "lines": [[["TRENDYOL'DA", "big"]], [["5,0 PUAN", "box"]], [["40 DEĞERLENDİRME", "gold"]]]}], "end": {"slogan": "En Rahat Gelin<br>Ayakkabısı Markası", "beats": 8}}
+{
+ "music": "/mnt/user-data/attachments/23a739f0-ee9d-5809-9295-a5cb4a62f5e7/97adcfef-kulakovka-fashion-week-614882.mp3",
+ "out": "/home/claude/reel-amsterdam-yorumlar.mp4",
+ "fonts": "/tmp/claude-0/-home-claude/23a739f0-ee9d-5809-9295-a5cb4a62f5e7/scratchpad/node_modules/@fontsource",
+ "logo": "/tmp/claude-0/-home-claude/23a739f0-ee9d-5809-9295-a5cb4a62f5e7/scratchpad/brand/dikey_siyah.png",
+ "search_from": 0,
+ "scenes": [
+  {
+   "kind": "intro",
+   "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/69056253-1785528872166_orig.jpeg",
+   "focus": [
+    0.5,
+    0.7
+   ],
+   "beats": 10,
+   "lines": [
+    [
+     [
+      "TARAKLI AYAKLAR İÇİN",
+      "kicker"
+     ]
+    ],
+    [
+     [
+      "EN",
+      "title"
+     ],
+     [
+      "RAHAT",
+      "title"
+     ]
+    ],
+    [
+     [
+      "GELİN",
+      "title"
+     ],
+     [
+      "AYAKKABISI",
+      "title"
+     ]
+    ],
+    [
+     [
+      "Amsterdam Gelin Ayakkabısı",
+      "sub"
+     ]
+    ]
+   ],
+   "show_rating": true
+  },
+  {
+   "kind": "review",
+   "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/36271129-1784028703142_orig.jpeg",
+   "focus": [
+    0.5,
+    0.6
+   ],
+   "beats": 20,
+   "name": "B** N** H**",
+   "quote": "Topuklu ayakkabı giymek benim için eziyet gibiyken mükemmel ötesi bir rahat oldu. Hızlı kargo ve satıcının ilgisi için teşekkür ederim. Taraklı ayakları olanlar da hiç tereddüt etmeden alabilir."
+  },
+  {
+   "kind": "review",
+   "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/12937369-1784366219076_orig.jpeg",
+   "focus": [
+    0.5,
+    0.6
+   ],
+   "beats": 20,
+   "name": "N** M**",
+   "quote": "ayakkabı tam istediğim gibi, küçük parmağımda kemik çıkığı var ve 6 gelin ayakkabıcısı gezdim hiçbirindeki ayakkabı ayağıma olmadı…. Topuklu/spor ayakkabıda 37 terlikte 36 giyiyorum 37 aldım. tek önerim belki içine yumuşak jel takabilirsiniz"
+  },
+  {
+   "kind": "review",
+   "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/69056253-1785528873015_orig.jpeg",
+   "focus": [
+    0.35,
+    0.5
+   ],
+   "beats": 20,
+   "name": "Trendyol Kullanıcısı",
+   "quote": "Henüz uzun süre giymedim ancak ilk izlenim olarak denediğim birçok markadan çok daha rahat olduğunu söyleyebilirim. Normalde diğer markalardan denediğim tek bantlı bu tarz modeller canımı çok acıtırken bu markada geniş ön bant sayesinde öyle bir problem yaşamadım."
+  },
+  {
+   "kind": "review",
+   "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/11162192-1786339057135_orig.jpeg",
+   "focus": [
+    0.45,
+    0.5
+   ],
+   "beats": 20,
+   "name": "Z** Ç**",
+   "quote": "Çok beğendim ürünü kaliteli bir sürü gelinlik ayakkabısı araştırdım en içime sinen bu oldu ben kilolu bir insan olmama rağmen ayakta kalıp denedim ağrı olmadı bir de ayağı zarif ve ince gösteriyor kızlar satıcı sorulara hemen dönüş yaptı hızlı kargondı teşekkürler 🙏🏻"
+  },
+  {
+   "kind": "review",
+   "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/16067709-1785938615759_orig.jpeg",
+   "focus": [
+    0.45,
+    0.5
+   ],
+   "beats": 20,
+   "name": "T** Ç**",
+   "quote": "Ürün çok güzel ve aşırı rahat tek sorun çok az bol geldi normalde spor ayakkabıda 36 topukluda 37 giyiyorum ve 37 aldım çok az bol oldu ama sorun olacağını düşünmüyorum çünkü düğünde tüm gün ayağımda olacağı için rahat edeceğimi düşünüyorum alacak olanlara şiddetle tavsiye ediyorum 🌸"
+  },
+  {
+   "kind": "review",
+   "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/5730817-1790004101118_orig.jpeg",
+   "focus": [
+    0.5,
+    0.55
+   ],
+   "beats": 20,
+   "name": "İ** Y**",
+   "quote": "Burdan iki ayakkabı aldım birinin kalıbı dar oldu satıcıyla konuştuk aslında bir numara büyük almalıydım bu şahane oldu o kadar rahat ki gelinliğin altına ve nikahta giyeceğim rengi de güzel duruyor bunun ön kısmı çok konforlu kayma da yapmıyor teşekkürler bu kadar yer gezdim içime bir tek bu sindi"
+  }
+ ],
+ "end": {
+  "slogan": "En Rahat Gelin<br>Ayakkabısı Markası",
+  "beats": 8
+ },
+ "rating": {
+  "score": "5,0",
+  "count": 40,
+  "note": "Hepsi 5 Yıldız"
+ }
+}

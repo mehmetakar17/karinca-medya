@@ -40,10 +40,14 @@ css = f"""
 @import url("file://{NM}/montserrat/600.css");@import url("file://{NM}/montserrat/700.css");@import url("file://{NM}/montserrat/900.css");
 @import url("file://{NM}/pt-serif/700.css");@import url("file://{NM}/pt-serif/400-italic.css");
 *{{margin:0;padding:0;box-sizing:border-box}} html,body{{width:{W}px;height:{H}px;background:transparent;overflow:hidden}}
-.card{{position:absolute;left:60px;right:60px;top:300px;background:rgba(246,241,234,.96);border-radius:34px;padding:44px 50px 46px;
+.badge{{position:absolute;left:60px;right:60px;top:250px;display:flex;align-items:center;gap:16px;background:#111;color:#fff;
+  border-radius:22px;padding:18px 26px;font-family:Montserrat;opacity:0;animation:fade .35s forwards;box-shadow:0 12px 40px rgba(0,0,0,.35)}}
+.badge.inwrap{{position:static;margin-top:6px}}
+.badge .bs{{display:flex;gap:2px}} .badge b{{font-weight:900;font-size:46px;color:#E8B04B}} .badge .bt{{font-weight:700;font-size:36px;line-height:1.15;white-space:nowrap}}
+.card{{position:absolute;left:60px;right:60px;top:400px;background:rgba(246,241,234,.96);border-radius:34px;padding:44px 50px 46px;
   box-shadow:0 20px 60px rgba(0,0,0,.35);opacity:0;animation:up .45s cubic-bezier(.2,.9,.3,1.15) .05s forwards}}
 .stars{{display:flex;gap:6px;margin-bottom:22px}} .stars span{{opacity:0;display:inline-block;animation:pop .3s cubic-bezier(.2,.9,.3,1.4) forwards}}
-.q{{font-family:'PT Serif';font-style:italic;font-size:58px;line-height:1.22;color:#1E1E1E}}
+.q{{font-family:'PT Serif','Noto Color Emoji';font-style:italic;font-size:56px;line-height:1.24;color:#1E1E1E}}
 .q span{{opacity:0;animation:fade .25s ease-out forwards}}
 .who{{margin-top:28px;font-family:Montserrat;font-weight:700;font-size:40px;color:#8C6D3F;opacity:0;animation:fade .3s forwards}}
 .who small{{font-weight:600;color:#6b6b6b;font-size:36px}}
@@ -62,16 +66,28 @@ css = f"""
 """
 
 
+RATING = spec.get('rating')  # örn. {"score":"5,0","count":40,"note":"Hepsi 5 Yıldız"}
+
+
+def rating_badge(delay=0.05):
+    if not RATING:
+        return ''
+    st = ''.join(STAR.replace('width="58" height="58"', 'width="44" height="44"') for _ in range(5))
+    return (f'<div class="badge" style="animation-delay:{delay:.2f}s"><span class="bs">{st}</span>'
+            f'<b>{RATING["score"]}</b><span class="bt">{RATING["count"]} Değerlendirme<br>{RATING["note"]}</span></div>')
+
+
 def scene_html(s):
     if s['kind'] == 'review':
-        stars = ''.join(f'<span style="animation-delay:{0.25 + i * P * 0.25:.2f}s">{STAR}</span>' for i in range(5))
-        words = s['quote'].split(); t0 = 0.25 + 5 * P * 0.25 + 0.05
-        # kelimeler sahnenin ~%40'ında yazılır, kalan süre okumak için ekranda kalır
-        step = min(0.18, max(0.06, (s['beats'] * P * 0.4) / max(1, len(words))))
+        words = s['quote'].split(); t0 = 0.45
+        n = len(s['quote'])
+        fs = 56 if n < 140 else 50 if n < 220 else 45 if n < 300 else 41
+        # kelimeler sahnenin ~%35'inde yazılır, kalan süre okumak için ekranda kalır
+        step = min(0.16, max(0.05, (s['beats'] * P * 0.35) / max(1, len(words))))
         words = ['“' + words[0]] + words[1:]; words[-1] += '”'
         q = ' '.join(f'<span style="animation-delay:{t0 + i * step:.2f}s">{html.escape(w)}</span>' for i, w in enumerate(words))
         tw = t0 + len(words) * step + 0.05
-        body = (f'<div class="card"><div class="stars">{stars}</div><div class="q">{q}</div>'
+        body = (f'{rating_badge()}<div class="card"><div class="q" style="font-size:{fs}px">{q}</div>'
                 f'<div class="who" style="animation-delay:{tw:.2f}s">{html.escape(s["name"])} <small>· Trendyol yorumu</small></div></div>')
     else:
         k = 0; lines = []
@@ -80,7 +96,10 @@ def scene_html(s):
             for text, st in line:
                 ws.append(f'<span class="w {st}" style="animation-delay:{0.05 + k * P * 0.5:.2f}s">{text}</span>'); k += 1
             lines.append(f'<div class="line">{"".join(ws)}</div>')
-        body = f'<div class="wrap">{"".join(lines)}</div>'
+        badge = rating_badge(0.05 + k * P * 0.5 + 0.1) if s.get('show_rating') else ''
+        body = f'<div class="wrap">{"".join(lines)}<div style="height:10px"></div>{badge}</div>'
+        if badge:
+            body = body.replace('class="badge"', 'class="badge inwrap"')
     return f'<html lang="tr"><head><meta charset="utf-8"><style>{css}</style></head><body>{body}</body></html>'
 
 
@@ -143,7 +162,7 @@ with sync_playwright() as pw:
 g = Image.new('RGBA', (W, H), (0, 0, 0, 0)); a = Image.linear_gradient('L').resize((W, 1100)).transpose(Image.FLIP_TOP_BOTTOM)
 g.paste((0, 0, 0, 255), (0, 0, W, 1100), a.point(lambda v: int(120 * (v / 255) ** 1.4))); gp = os.path.join(work, 'grad.png'); g.save(gp)
 vid_end = cut_t[-2]
-punch = "+".join(f"0.035*exp(-(t-{b:.3f})*14)*gte(t,{b:.3f})*lt(t,{b + 0.4:.3f})" for b in cut_t[:-1])
+punch = "+".join(f"0.035*exp(-max(t-{b:.3f},0)*14)*gte(t,{b:.3f})*lt(t,{b + 0.4:.3f})" for b in cut_t[:-1])
 fc = (f"[0:v]scale=w='trunc({W}*(1+{punch})/2)*2':h='trunc({H}*(1+{punch})/2)*2':eval=frame,crop={W}:{H},setsar=1[z];"
       f"[z][1:v]overlay=enable='lt(t,{vid_end:.3f})'[g0];")
 last = 'g0'; inputs = ['-i', body, '-loop', '1', '-i', gp]
