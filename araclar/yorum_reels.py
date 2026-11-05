@@ -52,6 +52,9 @@ css = f"""
   text-shadow:0 6px 0 rgba(0,0,0,.25),0 10px 40px rgba(0,0,0,.6);animation:pop .32s cubic-bezier(.2,.9,.3,1.2) forwards}}
 .big{{font-size:124px;letter-spacing:-2px}} .box{{font-size:104px;background:#111;padding:18px 34px 22px;border-radius:14px;text-shadow:none}}
 .gold{{font-size:76px;background:#F6F1EA;color:#1E1E1E;padding:16px 30px 20px;border-radius:12px;text-shadow:none;font-weight:900}}
+.title{{font-size:112px;letter-spacing:-2px}}
+.kicker{{font-size:62px;background:#F6F1EA;color:#1E1E1E;padding:14px 28px 18px;border-radius:12px;text-shadow:none;font-weight:900}}
+.sub{{font-family:'PT Serif';font-weight:700;font-size:64px;background:#111;color:#fff;padding:16px 34px 22px;border-radius:14px;text-shadow:none;margin-top:14px}}
 .line{{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;align-items:center}}
 @keyframes up{{0%{{opacity:0;transform:translateY(80px) scale(.92)}}100%{{opacity:1;transform:none}}}}
 @keyframes pop{{0%{{opacity:0;transform:scale(.3)}}60%{{opacity:1;transform:scale(1.18)}}100%{{opacity:1;transform:scale(1)}}}}
