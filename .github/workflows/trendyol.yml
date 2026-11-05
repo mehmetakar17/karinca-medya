@@ -2,7 +2,7 @@ name: Trendyol veri
 on:
   push:
     branches: [arsiv]
-    paths: ['.github/workflows/trendyol.yml']
+    paths: ['arsiv/trendyol/p1154499985/yorum/urls.tsv']
   workflow_dispatch:
 permissions:
   contents: write
@@ -11,29 +11,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Urun ve yorumlar
+      - name: Yorum fotograflari
         run: |
-          mkdir -p arsiv/trendyol/p1154499985; cd arsiv/trendyol/p1154499985
-          ID=1154499985
-          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36"
-          g() { curl -sSL -m 40 -A "$UA" -H "Accept-Language: tr-TR,tr;q=0.9" -H "Accept: $3" -o "$1" -w "$1 %{http_code} %{size_download}\n" "$2" || echo "$1 fail"; }
-          g urun.html "https://www.trendyol.com/karinca/en-rahat-gelin-ayakkabisi-tarakli-ayaklara-ozel-gelinlik-ayakkabisi-p-$ID" "text/html"
-          g yorum.html "https://www.trendyol.com/karinca/en-rahat-gelin-ayakkabisi-tarakli-ayaklara-ozel-gelinlik-ayakkabisi-p-$ID/yorumlar" "text/html"
-          for p in 0 1 2; do
-            g r1_$p.json "https://apigw.trendyol.com/discovery-storefront-trproductgw-service/api/review-read/product-reviews/detailed?contentId=$ID&page=$p&order=DESC&orderBy=Score&channelId=1" "application/json"
-            g r2_$p.json "https://public-mdc.trendyol.com/discovery-web-socialgw-service/api/review/$ID?page=$p&order=5&orderByField=Score&culture=tr-TR&storefrontId=1" "application/json"
-          done
-          g m1.json "https://apigw.trendyol.com/discovery-storefront-trproductgw-service/api/review-read/product-reviews/media?contentId=$ID&page=0&channelId=1" "application/json"
-          g m2.json "https://public-mdc.trendyol.com/discovery-web-socialgw-service/api/review/media/$ID?page=0&culture=tr-TR" "application/json"
-          # medya linklerini topla ve indir
-          cat *.json *.html 2>/dev/null | grep -oE 'https?:\\?/\\?/[a-z0-9.-]*(dsmcdn|trendyol)[a-z0-9.-]*\\?/[^"\\ ]*\.(jpe?g|png|webp|mp4|m3u8|mov)' | sed 's#\\/#/#g' | sort -u > medya_linkleri.txt
-          grep -E 'review|yorum|ugc|social' medya_linkleri.txt > yorum_medya.txt || true
-          wc -l medya_linkleri.txt yorum_medya.txt
-          mkdir -p medya; i=0
-          while read -r u; do i=$((i+1)); e="${u##*.}"; curl -sSL -m 60 -A "$UA" -o "medya/$(printf %03d $i).$e" "$u" || true; done < yorum_medya.txt
-          ls medya | wc -l; du -sh medya
+          cd arsiv/trendyol/p1154499985/yorum
+          while IFS=$'\t' read -r f u; do [ -z "$f" ] && continue; curl -fsSL -m 60 -A "Mozilla/5.0" -o "$f" -w "$f %{http_code} %{size_download}\n" "$u" || { echo "$f fail"; rm -f "$f"; }; done < urls.tsv
       - name: Kaydet
         run: |
           git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
-          git pull -q --rebase || true
-          git add -f arsiv/trendyol; git commit -m "Trendyol urun ve yorum verisi" || true; git push
+          git add -f arsiv/trendyol; git commit -m "Trendyol yorum fotograflari" || true; git pull -q --rebase || true; git push
