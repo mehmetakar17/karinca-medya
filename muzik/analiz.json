@@ -1,0 +1,92 @@
+[
+ {
+  "dosya": "kulakovka-chill-reel-570198.mp3",
+  "sure": 148.5,
+  "bpm": 120.2,
+  "ton": "D# minor",
+  "bantlar": {
+   "sub": 28.5,
+   "bass": 33.7,
+   "lowmid": 17.9,
+   "mid": 12.4,
+   "pres": 3.6,
+   "air": 3.8
+  },
+  "perkusif_oran": 0.41,
+  "parlaklik_hz": 3161,
+  "drop_sn": 16.0,
+  "ilk_vurus": 1.8
+ },
+ {
+  "dosya": "sosin-fashion-fashion-music-603253.mp3",
+  "sure": 180.1,
+  "bpm": 120.2,
+  "ton": "D minor",
+  "bantlar": {
+   "sub": 41.7,
+   "bass": 29.2,
+   "lowmid": 13.8,
+   "mid": 12.4,
+   "pres": 2.0,
+   "air": 0.8
+  },
+  "perkusif_oran": 0.47,
+  "parlaklik_hz": 2476,
+  "drop_sn": 2.1,
+  "ilk_vurus": 0.406
+ },
+ {
+  "dosya": "kulakovka-fashion-week-614882.mp3",
+  "sure": 149.6,
+  "bpm": 120.2,
+  "ton": "G# minor",
+  "bantlar": {
+   "sub": 40.1,
+   "bass": 33.5,
+   "lowmid": 10.6,
+   "mid": 11.5,
+   "pres": 2.4,
+   "air": 1.9
+  },
+  "perkusif_oran": 0.18,
+  "parlaklik_hz": 3278,
+  "drop_sn": 16.1,
+  "ilk_vurus": 0.046
+ },
+ {
+  "dosya": "tatamusic-fashion-fashion-music-617333.mp3",
+  "sure": 106.3,
+  "bpm": 123.0,
+  "ton": "G# minor",
+  "bantlar": {
+   "sub": 24.3,
+   "bass": 39.4,
+   "lowmid": 16.6,
+   "mid": 15.8,
+   "pres": 2.4,
+   "air": 1.5
+  },
+  "perkusif_oran": 0.18,
+  "parlaklik_hz": 2498,
+  "drop_sn": 7.4,
+  "ilk_vurus": 0.058
+ },
+ {
+  "dosya": "ikoliks_aj-fashion-fashion-music-617386.mp3",
+  "sure": 106.0,
+  "bpm": 114.8,
+  "ton": "E minor",
+  "bantlar": {
+   "sub": 54.0,
+   "bass": 24.5,
+   "lowmid": 11.4,
+   "mid": 9.0,
+   "pres": 1.0,
+   "air": 0.2
+  },
+  "perkusif_oran": 0.24,
+  "parlaklik_hz": 1734,
+  "drop_sn": 0.6,
+  "ilk_vurus": 0.557
+ }
+]
