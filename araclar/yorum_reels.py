@@ -63,10 +63,12 @@ def scene_html(s):
     if s['kind'] == 'review':
         stars = ''.join(f'<span style="animation-delay:{0.25 + i * P * 0.25:.2f}s">{STAR}</span>' for i in range(5))
         words = s['quote'].split(); t0 = 0.25 + 5 * P * 0.25 + 0.05
-        step = min(0.09, max(0.04, (s['beats'] * P * 0.45) / max(1, len(words))))
+        # kelimeler sahnenin ~%40'ında yazılır, kalan süre okumak için ekranda kalır
+        step = min(0.18, max(0.06, (s['beats'] * P * 0.4) / max(1, len(words))))
+        words = ['“' + words[0]] + words[1:]; words[-1] += '”'
         q = ' '.join(f'<span style="animation-delay:{t0 + i * step:.2f}s">{html.escape(w)}</span>' for i, w in enumerate(words))
         tw = t0 + len(words) * step + 0.05
-        body = (f'<div class="card"><div class="stars">{stars}</div><div class="q">“{q}”</div>'
+        body = (f'<div class="card"><div class="stars">{stars}</div><div class="q">{q}</div>'
                 f'<div class="who" style="animation-delay:{tw:.2f}s">{html.escape(s["name"])} <small>· Trendyol yorumu</small></div></div>')
     else:
         k = 0; lines = []
