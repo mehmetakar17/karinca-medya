@@ -44,20 +44,20 @@ css = f"""
   border-radius:22px;padding:18px 26px;font-family:Montserrat;opacity:0;animation:fade .35s forwards;box-shadow:0 12px 40px rgba(0,0,0,.35)}}
 .badge.inwrap{{position:static;margin-top:6px}}
 .badge .bs{{display:flex;gap:2px}} .badge b{{font-weight:900;font-size:46px;color:#E8B04B}} .badge .bt{{font-weight:700;font-size:36px;line-height:1.15;white-space:nowrap}}
-.card{{position:absolute;left:50px;right:50px;top:250px;background:rgba(246,241,234,.96);border-radius:34px;padding:36px 44px 38px;
+.card{{position:absolute;left:60px;right:60px;top:250px;background:rgba(246,241,234,.74);border-radius:34px;padding:44px 50px 46px;
   box-shadow:0 20px 60px rgba(0,0,0,.35);opacity:0;animation:up .45s cubic-bezier(.2,.9,.3,1.15) .05s forwards}}
 .card.bottom{{top:auto;bottom:400px}}
 .stars{{display:flex;gap:6px;margin-bottom:22px}} .stars span{{opacity:0;display:inline-block;animation:pop .3s cubic-bezier(.2,.9,.3,1.4) forwards}}
 .q{{font-family:'PT Serif','Noto Color Emoji';font-style:italic;font-size:56px;line-height:1.24;color:#1E1E1E}}
 .q span{{opacity:0;animation:fade .25s ease-out forwards}}
-.who{{margin-top:20px;font-family:Montserrat;font-weight:700;font-size:40px;color:#8C6D3F;opacity:0;animation:fade .3s forwards}}
+.who{{margin-top:28px;font-family:Montserrat;font-weight:700;font-size:40px;color:#8C6D3F;opacity:0;animation:fade .3s forwards}}
 .who small{{font-weight:600;color:#6b6b6b;font-size:36px}}
-.wrap{{position:absolute;left:60px;right:60px;top:260px;display:flex;flex-direction:column;align-items:center;gap:18px}}
+.wrap{{position:absolute;left:60px;right:60px;top:330px;display:flex;flex-direction:column;align-items:center;gap:18px}}
 .w{{font-family:Montserrat;font-weight:900;color:#fff;line-height:1;opacity:0;display:inline-block;
   text-shadow:0 6px 0 rgba(0,0,0,.25),0 10px 40px rgba(0,0,0,.6);animation:pop .32s cubic-bezier(.2,.9,.3,1.2) forwards}}
 .big{{font-size:124px;letter-spacing:-2px}} .box{{font-size:104px;background:#111;padding:18px 34px 22px;border-radius:14px;text-shadow:none}}
 .gold{{font-size:76px;background:#F6F1EA;color:#1E1E1E;padding:16px 30px 20px;border-radius:12px;text-shadow:none;font-weight:900}}
-.title{{font-size:96px;letter-spacing:-2px}}
+.title{{font-size:112px;letter-spacing:-2px}}
 .kicker{{font-size:62px;background:#F6F1EA;color:#1E1E1E;padding:14px 28px 18px;border-radius:12px;text-shadow:none;font-weight:900}}
 .sub{{font-family:'PT Serif';font-weight:700;font-size:64px;background:#111;color:#fff;padding:16px 34px 22px;border-radius:14px;text-shadow:none;margin-top:14px}}
 .line{{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;align-items:center}}
@@ -82,7 +82,7 @@ def scene_html(s):
     if s['kind'] == 'review':
         words = s['quote'].split(); t0 = 0.45
         n = len(s['quote'])
-        fs = 52 if n < 140 else 47 if n < 220 else 43 if n < 300 else 40
+        fs = 56 if n < 140 else 50 if n < 220 else 45 if n < 300 else 41
         # kelimeler sahnenin ~%35'inde yazılır, kalan süre okumak için ekranda kalır
         step = min(0.16, max(0.05, (s['beats'] * P * 0.35) / max(1, len(words))))
         words = ['“' + words[0]] + words[1:]; words[-1] += '”'
