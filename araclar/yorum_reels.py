@@ -74,7 +74,7 @@ def rating_badge(delay=0.05):
         return ''
     st = ''.join(STAR.replace('width="58" height="58"', 'width="44" height="44"') for _ in range(5))
     return (f'<div class="badge" style="animation-delay:{delay:.2f}s"><span class="bs">{st}</span>'
-            f'<b>{RATING["score"]}</b><span class="bt">{RATING["count"]} Değerlendirme<br>{RATING["note"]}</span></div>')
+            f'<span class="bt">{RATING["count"]} Değerlendirme<br>{RATING["note"]}</span></div>')
 
 
 def scene_html(s):
