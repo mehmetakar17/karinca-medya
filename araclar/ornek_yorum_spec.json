@@ -47,7 +47,13 @@
      ]
     ]
    ],
-   "show_rating": true
+   "show_rating": true,
+   "layout": "fit",
+   "fit_y": 480,
+   "zoom": [
+    1.0,
+    1.04
+   ]
   },
   {
    "kind": "review",
@@ -58,18 +64,27 @@
    ],
    "beats": 20,
    "name": "B** N** H**",
-   "quote": "Topuklu ayakkabı giymek benim için eziyet gibiyken mükemmel ötesi bir rahat oldu. Hızlı kargo ve satıcının ilgisi için teşekkür ederim. Taraklı ayakları olanlar da hiç tereddüt etmeden alabilir."
+   "quote": "Topuklu ayakkabı giymek benim için eziyet gibiyken mükemmel ötesi bir rahat oldu. Hızlı kargo ve satıcının ilgisi için teşekkür ederim. Taraklı ayakları olanlar da hiç tereddüt etmeden alabilir.",
+   "layout": "fit",
+   "fit_y": 480,
+   "card": "top",
+   "zoom": [
+    1.0,
+    1.04
+   ]
   },
   {
    "kind": "review",
    "img": "/home/claude/karinca-medya/arsiv/trendyol/p1154499985/yorum/12937369-1784366219076_orig.jpeg",
    "focus": [
     0.5,
-    0.6
+    0.12
    ],
    "beats": 20,
    "name": "N** M**",
-   "quote": "ayakkabı tam istediğim gibi, küçük parmağımda kemik çıkığı var ve 6 gelin ayakkabıcısı gezdim hiçbirindeki ayakkabı ayağıma olmadı…. Topuklu/spor ayakkabıda 37 terlikte 36 giyiyorum 37 aldım. tek önerim belki içine yumuşak jel takabilirsiniz"
+   "quote": "ayakkabı tam istediğim gibi, küçük parmağımda kemik çıkığı var ve 6 gelin ayakkabıcısı gezdim hiçbirindeki ayakkabı ayağıma olmadı…. Topuklu/spor ayakkabıda 37 terlikte 36 giyiyorum 37 aldım. tek önerim belki içine yumuşak jel takabilirsiniz",
+   "layout": "fill",
+   "card": "top"
   },
   {
    "kind": "review",
@@ -80,7 +95,9 @@
    ],
    "beats": 20,
    "name": "Trendyol Kullanıcısı",
-   "quote": "Henüz uzun süre giymedim ancak ilk izlenim olarak denediğim birçok markadan çok daha rahat olduğunu söyleyebilirim. Normalde diğer markalardan denediğim tek bantlı bu tarz modeller canımı çok acıtırken bu markada geniş ön bant sayesinde öyle bir problem yaşamadım."
+   "quote": "Henüz uzun süre giymedim ancak ilk izlenim olarak denediğim birçok markadan çok daha rahat olduğunu söyleyebilirim. Normalde diğer markalardan denediğim tek bantlı bu tarz modeller canımı çok acıtırken bu markada geniş ön bant sayesinde öyle bir problem yaşamadım.",
+   "layout": "fill",
+   "card": "bottom"
   },
   {
    "kind": "review",
@@ -91,7 +108,14 @@
    ],
    "beats": 20,
    "name": "Z** Ç**",
-   "quote": "Çok beğendim ürünü kaliteli bir sürü gelinlik ayakkabısı araştırdım en içime sinen bu oldu ben kilolu bir insan olmama rağmen ayakta kalıp denedim ağrı olmadı bir de ayağı zarif ve ince gösteriyor kızlar satıcı sorulara hemen dönüş yaptı hızlı kargondı teşekkürler 🙏🏻"
+   "quote": "Çok beğendim ürünü kaliteli bir sürü gelinlik ayakkabısı araştırdım en içime sinen bu oldu ben kilolu bir insan olmama rağmen ayakta kalıp denedim ağrı olmadı bir de ayağı zarif ve ince gösteriyor kızlar satıcı sorulara hemen dönüş yaptı hızlı kargondı teşekkürler 🙏🏻",
+   "layout": "fit",
+   "fit_y": 1000,
+   "card": "top",
+   "zoom": [
+    1.0,
+    1.04
+   ]
   },
   {
    "kind": "review",
@@ -102,7 +126,14 @@
    ],
    "beats": 20,
    "name": "T** Ç**",
-   "quote": "Ürün çok güzel ve aşırı rahat tek sorun çok az bol geldi normalde spor ayakkabıda 36 topukluda 37 giyiyorum ve 37 aldım çok az bol oldu ama sorun olacağını düşünmüyorum çünkü düğünde tüm gün ayağımda olacağı için rahat edeceğimi düşünüyorum alacak olanlara şiddetle tavsiye ediyorum 🌸"
+   "quote": "Ürün çok güzel ve aşırı rahat tek sorun çok az bol geldi normalde spor ayakkabıda 36 topukluda 37 giyiyorum ve 37 aldım çok az bol oldu ama sorun olacağını düşünmüyorum çünkü düğünde tüm gün ayağımda olacağı için rahat edeceğimi düşünüyorum alacak olanlara şiddetle tavsiye ediyorum 🌸",
+   "layout": "fit",
+   "fit_y": 1000,
+   "card": "top",
+   "zoom": [
+    1.0,
+    1.04
+   ]
   },
   {
    "kind": "review",
@@ -113,7 +144,14 @@
    ],
    "beats": 20,
    "name": "İ** Y**",
-   "quote": "Burdan iki ayakkabı aldım birinin kalıbı dar oldu satıcıyla konuştuk aslında bir numara büyük almalıydım bu şahane oldu o kadar rahat ki gelinliğin altına ve nikahta giyeceğim rengi de güzel duruyor bunun ön kısmı çok konforlu kayma da yapmıyor teşekkürler bu kadar yer gezdim içime bir tek bu sindi"
+   "quote": "Burdan iki ayakkabı aldım birinin kalıbı dar oldu satıcıyla konuştuk aslında bir numara büyük almalıydım bu şahane oldu o kadar rahat ki gelinliğin altına ve nikahta giyeceğim rengi de güzel duruyor bunun ön kısmı çok konforlu kayma da yapmıyor teşekkürler bu kadar yer gezdim içime bir tek bu sindi",
+   "layout": "fit",
+   "fit_y": 1000,
+   "card": "top",
+   "zoom": [
+    1.0,
+    1.04
+   ]
   }
  ],
  "end": {
