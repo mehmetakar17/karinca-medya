@@ -6,7 +6,8 @@ SPEC alanları:
   out: çıktı mp4
   beats_per_cut: her sahne kaç vuruş (varsayılan 2)
   search_from: müzikte en güçlü bölümü aramaya başlanacak saniye (varsayılan 0)
-  clips: [{"type":"video","src":..., "ss":sn, "crop":[w,h,x,y] (ops.), "fill":true/false},
+  clips: [{"type":"video","src":..., "ss":sn, "crop":[w,h,x,y] (ops.), "fill":true/false,
+           "beats":n (ops., bu sahne kaç vuruş), "speed":0.5 (ops., 60fps kaynakta ağır çekim), "flash":true (ops., girişte beyaz flaş)},
           {"type":"image","src":..., "focus":[fx,fy] (0-1, zoom merkezi), "zoom":[z0,z1]}]
   cards: [{"from":sahne_no, "to":sahne_no(hariç), "lines":[[["METİN","stil"],...], ...]}]
          stiller: big, huge, box, gold
@@ -36,14 +37,17 @@ hop = 256
 oenv = librosa.onset.onset_strength(y=y, sr=sr, hop_length=hop)
 _, fr = librosa.beat.beat_track(onset_envelope=oenv, sr=sr, hop_length=hop, tightness=200)
 bt = librosa.frames_to_time(fr, sr=sr, hop_length=hop)
-need = bpc * len(clips) + end_beats
+cum = [0]
+for c in clips:
+    cum.append(cum[-1] + c.get('beats', bpc))
+need = cum[-1] + end_beats
 cands = [i for i in range(len(bt) - need) if bt[i] >= spec.get('search_from', 0)]
 best = max(cands, key=lambda i: oenv[fr[i:i + need]].mean())
 phase = max(range(4), key=lambda p: oenv[fr[best + p:best + need:4]].mean())
 i0 = best + phase; start = float(bt[i0])
 beats = bt[i0:i0 + need + 1] - start
-cut_t = [float(beats[k * bpc]) for k in range(len(clips) + 1)]
-end_t = float(beats[min(len(beats) - 1, len(clips) * bpc + end_beats)])
+cut_t = [float(beats[k]) for k in cum]
+end_t = float(beats[min(len(beats) - 1, cum[-1] + end_beats)])
 frames = [round(t * FPS) for t in cut_t] + [round(end_t * FPS)]
 P = float(np.mean(np.diff(beats)))
 print(json.dumps({"start": round(start, 3), "bpm": round(60 / P, 1)}))
@@ -56,14 +60,18 @@ for k, c in enumerate(clips):
     if c['type'] == 'video':
         crop = c.get('crop')
         pre = f"crop={crop[0]}:{crop[1]}:{crop[2]}:{crop[3]}," if crop else ''
+        sp = c.get('speed', 1.0)
+        if sp != 1.0:
+            pre = f"setpts=PTS/{sp}," + pre
+        d_in = d * sp
         if c.get('fill'):
             vf = (f"[0:v]{pre}fps=30,split[a][b];[a]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
                   f"boxblur=40:2,eq=brightness=-0.06:saturation=0.8[bg];[b]scale={W}:-2[fg];[bg][fg]overlay=0:(H-h)/2,setsar=1,format=yuv420p")
-            run(['ffmpeg', '-v', 'error', '-y', '-ss', str(c['ss']), '-t', f'{d:.4f}', '-i', c['src'], '-filter_complex', vf,
+            run(['ffmpeg', '-v', 'error', '-y', '-ss', str(c['ss']), '-t', f'{d_in:.4f}', '-i', c['src'], '-filter_complex', vf,
                  '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', p])
         else:
             vf = f"{pre}fps=30,scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},setsar=1,format=yuv420p"
-            run(['ffmpeg', '-v', 'error', '-y', '-ss', str(c['ss']), '-t', f'{d:.4f}', '-i', c['src'], '-vf', vf,
+            run(['ffmpeg', '-v', 'error', '-y', '-ss', str(c['ss']), '-t', f'{d_in:.4f}', '-i', c['src'], '-vf', vf, '-frames:v', str(n),
                  '-an', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', p])
     else:  # image: Ken Burns
         im = Image.open(c['src']).convert('RGB'); iw, ih = im.size
@@ -150,7 +158,10 @@ gp = os.path.join(work, 'grad.png'); g.save(gp)
 
 vid_end = frames[-2] / FPS
 punch = "+".join(f"0.05*exp(-max(t-{b:.3f},0)*14)*gte(t,{b:.3f})*lt(t,{b + 0.4:.3f})" for b in beats if b < vid_end)
-fc = (f"[0:v]scale=w='trunc({W}*(1+{punch})/2)*2':h='trunc({H}*(1+{punch})/2)*2':eval=frame,crop={W}:{H},setsar=1[z];"
+fl = [cut_t[k] for k, c in enumerate(clips) if c.get('flash')]
+flash = ("+".join(f"0.55*exp(-max(t-{b:.3f},0)*10)*gte(t,{b:.3f})*lt(t,{b + 0.35:.3f})" for b in fl)) or "0"
+fc = (f"[0:v]scale=w='trunc({W}*(1+{punch})/2)*2':h='trunc({H}*(1+{punch})/2)*2':eval=frame,crop={W}:{H},setsar=1,"
+      f"eq=brightness='{flash}':eval=frame[z];"
       f"[z][1:v]overlay=enable='lt(t,{vid_end:.3f})'[g0];")
 last = 'g0'; inputs = ['-i', body, '-loop', '1', '-i', gp]
 for j, (mv, t0) in enumerate(movs):
