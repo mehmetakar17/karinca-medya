@@ -11,6 +11,7 @@ SPEC alanları:
           {"type":"image","src":..., "focus":[fx,fy] (0-1, zoom merkezi), "zoom":[z0,z1]}]
   cards: [{"from":sahne_no, "to":sahne_no(hariç), "lines":[[["METİN","stil"],...], ...]}]
          stiller: big, huge, box, gold
+  grade: ops. ffmpeg renk filtresi, tüm video sahnelerine (örn. "eq=brightness=0.03:contrast=1.06:saturation=1.08")
   end: {"slogan":"En Rahat Gelin<br>Ayakkabısı Markası", "beats":6}
   logo: dikey siyah logo png yolu
   fonts: @fontsource node_modules yolu
@@ -64,6 +65,8 @@ for k, c in enumerate(clips):
         if sp != 1.0:
             pre = f"setpts=PTS/{sp}," + pre
         d_in = d * sp
+        if spec.get('grade'):
+            pre = pre + spec['grade'] + ','
         if c.get('fill'):
             vf = (f"[0:v]{pre}fps=30,split[a][b];[a]scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
                   f"boxblur=40:2,eq=brightness=-0.06:saturation=0.8[bg];[b]scale={W}:-2[fg];[bg][fg]overlay=0:(H-h)/2,setsar=1,format=yuv420p")
