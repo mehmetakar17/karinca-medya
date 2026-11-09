@@ -8,7 +8,7 @@ SPEC alanları:
   search_from: müzikte en güçlü bölümü aramaya başlanacak saniye (varsayılan 0)
   clips: [{"type":"video","src":..., "ss":sn, "crop":[w,h,x,y] (ops.), "fill":true/false,
            "beats":n (ops., bu sahne kaç vuruş), "speed":0.5 (ops., 60fps kaynakta ağır çekim), "flash":true (ops., girişte beyaz flaş)},
-          {"type":"image","src":..., "focus":[fx,fy] (0-1, zoom merkezi), "zoom":[z0,z1]}]
+          {"type":"image","src":..., "focus":[fx,fy] (0-1, zoom merkezi), "zoom":[z0,z1], "pan":[x0,x1] (ops.), "beats", "flash"}]
   cards: [{"from":sahne_no, "to":sahne_no(hariç), "lines":[[["METİN","stil"],...], ...]}]
          stiller: big, huge, box, gold
   grade: ops. ffmpeg renk filtresi, tüm video sahnelerine (örn. "eq=brightness=0.03:contrast=1.06:saturation=1.08")
@@ -86,7 +86,9 @@ for k, c in enumerate(clips):
         big = im.resize((W * 2, H * 2), Image.LANCZOS); src = os.path.join(work, f'i{k:02d}.png'); big.save(src)
         z0, z1 = c.get('zoom', [1.0, 1.12]); fx, fy = c.get('focus', [0.5, 0.5])
         z = f"{z0}+({z1}-{z0})*on/{max(1, n - 1)}"
-        vf = (f"zoompan=z='{z}':x='(iw-iw/zoom)*{fx}':y='(ih-ih/zoom)*{fy}':d={n}:s={W}x{H}:fps=30,setsar=1,format=yuv420p")
+        px = c.get('pan')  # [x0,x1] yatay kaydırma (0-1)
+        xe = f"(iw-iw/zoom)*({px[0]}+({px[1]}-{px[0]})*on/{max(1, n - 1)})" if px else f"(iw-iw/zoom)*{fx}"
+        vf = (f"zoompan=z='{z}':x='{xe}':y='(ih-ih/zoom)*{fy}':d={n}:s={W}x{H}:fps=30,setsar=1,format=yuv420p")
         run(['ffmpeg', '-v', 'error', '-y', '-loop', '1', '-i', src, '-vf', vf, '-frames:v', str(n),
              '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '16', p])
 
