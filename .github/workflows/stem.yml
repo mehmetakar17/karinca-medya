@@ -1,0 +1,33 @@
+name: Muzik katmanlari (demucs)
+on:
+  push:
+    branches: [arsiv]
+    paths: ['muzik/stem_istek.txt']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  ayir:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: '3.11'}
+      - name: Kur
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq ffmpeg
+          pip install -q torch torchaudio --index-url https://download.pytorch.org/whl/cpu
+          pip install -q demucs soundfile
+      - name: Ayir
+        run: |
+          mkdir -p muzik/stem
+          while read -r f; do [ -z "$f" ] && continue
+            python -m demucs -n htdemucs --mp3 --mp3-bitrate 256 -o /tmp/out "muzik/$f"
+            b="${f%.*}"; for s in drums bass other vocals; do cp "/tmp/out/htdemucs/$b/$s.mp3" "muzik/stem/${b}__$s.mp3"; done
+          done < muzik/stem_istek.txt
+          ls -la muzik/stem
+      - name: Kaydet
+        run: |
+          git config user.name "github-actions"; git config user.email "github-actions@users.noreply.github.com"
+          git add muzik/stem; git commit -m "Muzik katmanlari" || true; git pull -q --rebase || true; git push
