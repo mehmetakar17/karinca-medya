@@ -12,6 +12,8 @@ SPEC alanları:
   cards: [{"from":sahne_no, "to":sahne_no(hariç), "lines":[[["METİN","stil"],...], ...]}]
          stiller: big, huge, box, gold
   grade: ops. ffmpeg renk filtresi, tüm video sahnelerine (örn. "eq=brightness=0.03:contrast=1.06:saturation=1.08")
+  start_at: ops. müziğin başlayacağı saniye (en yakın vuruşa oturur; bölüm başı seçilir)
+  stems: ops. sade karışım {"dir":stem klasörü,"base":dosya kökü,"drums":1,"bass":1,"other":0.5,"vocals":0} (music yerine)
   end: {"slogan":"En Rahat Gelin<br>Ayakkabısı Markası", "beats":6}
   logo: dikey siyah logo png yolu
   fonts: @fontsource node_modules yolu
@@ -31,6 +33,16 @@ def run(a):
 
 
 # ---------- müzik vuruşları ----------
+if spec.get('stems'):
+    # müziği katmanlarından (demucs) sade bir karışımla yeniden kur: {"dir":..., "base":..., "drums":1, "bass":1, "other":0.5, "vocals":0}
+    st = spec['stems']; ins = []; ws = []
+    for k in ('drums', 'bass', 'other', 'vocals'):
+        if st.get(k, 0) > 0:
+            ins += ['-i', os.path.join(st['dir'], f"{st['base']}__{k}.mp3")]; ws.append(str(st[k]))
+    mixp = os.path.join(work, 'mix.wav')
+    fc_m = ''.join(f'[{i}:a]' for i in range(len(ws))) + f"amix=inputs={len(ws)}:weights={' '.join(ws)}:normalize=0,loudnorm=I=-14:TP=-1.5:LRA=11[a]"
+    run(['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', fc_m, '-map', '[a]', '-ar', '44100', mixp])
+    spec['music'] = mixp
 music = spec['music']; bpc = spec.get('beats_per_cut', 2); clips = spec['clips']
 end_beats = spec.get('end', {}).get('beats', 6)
 y, sr = librosa.load(music, sr=22050, duration=120)
@@ -45,7 +57,10 @@ need = cum[-1] + end_beats
 cands = [i for i in range(len(bt) - need) if bt[i] >= spec.get('search_from', 0)]
 best = max(cands, key=lambda i: oenv[fr[i:i + need]].mean())
 phase = max(range(4), key=lambda p: oenv[fr[best + p:best + need:4]].mean())
-i0 = best + phase; start = float(bt[i0])
+i0 = best + phase
+if 'start_at' in spec:  # bölüm başına sabitle (müzik cümlesi yarıda kesilmesin)
+    i0 = int(np.argmin(np.abs(bt - float(spec['start_at']))))
+start = float(bt[i0])
 beats = bt[i0:i0 + need + 1] - start
 cut_t = [float(beats[k]) for k in cum]
 end_t = float(beats[min(len(beats) - 1, cum[-1] + end_beats)])
