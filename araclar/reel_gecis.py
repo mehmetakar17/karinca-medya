@@ -17,7 +17,7 @@ import numpy as np, cv2, librosa
 
 spec = json.load(open(sys.argv[1]))
 W, H, FPS = 1080, 1920, 30
-HALF = 0.16  # geçiş yarı süresi (sn)
+HALF = spec.get('half', 0.10)  # geçiş yarı süresi (sn) — kısa ve vuruşa oturan
 work = tempfile.mkdtemp(prefix='gecis_')
 NM = spec['fonts']; logo = spec['logo']
 rng = np.random.default_rng(7)
@@ -64,6 +64,24 @@ else:
         inside = [x for x in bounds if b < x < b + need - 4]
         cands.append((len(inside), -rb[b:b + need].mean(), b))
     i0 = sorted(cands)[0][2] if cands else 0
+# davul katmanından kick (bas davul) zamanları: kesimleri gerçek vuruşa oturt, ölçü başını bul
+kick_env = None
+if spec.get('stems'):
+    yd, _ = librosa.load(os.path.join(spec['stems']['dir'], f"{spec['stems']['base']}__drums.mp3"), sr=22050)
+    kick_env = librosa.onset.onset_strength(y=yd, sr=sr, hop_length=hop, fmax=150, n_mels=64)
+    kicks = librosa.onset.onset_detect(onset_envelope=kick_env, sr=sr, hop_length=hop, units='time')
+    snapped = bt.copy()
+    for k, t in enumerate(bt):
+        j = np.argmin(np.abs(kicks - t))
+        if abs(kicks[j] - t) < 0.06:
+            snapped[k] = kicks[j]
+    bt = snapped
+    # ölçü başı: 4 fazdan kick'i en güçlü olanı
+    def kstr(i):
+        f = int(bt[i] * sr / hop); return kick_env[max(0, f - 2):f + 3].max() if f < len(kick_env) else 0
+    ph = max(range(4), key=lambda p: np.mean([kstr(i0 + p + 4 * q) for q in range(8) if i0 + p + 4 * q < len(bt)]))
+    if spec.get('downbeat_detect'):  # bölüm başı zaten ölçü başıdır; dört dörtlükte kick her vuruşta olduğundan varsayılan kapalı
+        i0 += ph
 assert i0 + need < len(bt), 'müzik bu süre için kısa'
 start = float(bt[i0])
 beats = bt[i0:i0 + need + 1] - start
@@ -71,6 +89,26 @@ cut_t = [float(beats[k]) for k in cum]
 end_t = float(beats[need])
 P = float(np.mean(np.diff(beats)))
 print(json.dumps({'start': round(start, 2), 'bpm': round(60 / P, 1), 'dur': round(end_t, 2)}))
+
+# ---------- kaynak videodaki kendi kesmeleri: sahne bunların üstüne denk gelmesin ----------
+_cuts = {}
+def src_cuts(path):
+    if path not in _cuts:
+        if path.lower().endswith(('.jpg', '.jpeg', '.png')):
+            _cuts[path] = []
+        else:
+            o = subprocess.run(['ffmpeg', '-hide_banner', '-i', path, '-vf', 'scale=270:-2,scdet=threshold=12', '-an', '-f', 'null', '-'],
+                               capture_output=True, text=True).stderr
+            _cuts[path] = [float(x.split()[-1]) for x in o.split('\n') if 'lavfi.scd.time' in x for x in [x[x.index('lavfi.scd.time'):]]]
+    return _cuts[path]
+for i, s_ in enumerate(shots):
+    sp = s_.get('speed', 1.0); span = (cut_t[i + 1] - cut_t[i] + 2 * HALF) * sp
+    a0 = s_['ss'] - HALF * sp
+    for c in src_cuts(s_['src']):
+        if 0.03 < c > a0 and c < a0 + span:
+            new = c + 0.05 + HALF * sp if (c - a0) < span / 2 else c - 0.05 - span + HALF * sp
+            print(f"sahne {i}: kaynak kesmesi {c:.2f}s, ss {s_['ss']} -> {new:.2f}"); s_['ss'] = round(new, 2)
+            a0 = s_['ss'] - HALF * sp
 
 # ---------- sahne kaynakları (önceden ölçekle) ----------
 srcs = []
